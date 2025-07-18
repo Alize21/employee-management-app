@@ -9,7 +9,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(cors({
     origin: 'https://localhost:'+port,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }))
 

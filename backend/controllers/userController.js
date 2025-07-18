@@ -1,56 +1,66 @@
-let data = [
-    {id : 1, employee: 'Alize', role: 'admin'},
-    {id : 2, employee: 'Alice', role: 'employee'},
-    {id : 3, employee: 'Jambul', role: 'employee'},
-]
+const Employee = require('../models/employee')
+const bcrypt = require('bcryptjs')
+// let data = [
+//     {id : 1, employee: 'Alize', role: 'admin'},
+//     {id : 2, employee: 'Alice', role: 'employee'},
+//     {id : 3, employee: 'Jambul', role: 'employee'},
+// ]
 
-const getAllUsers = (req, res) => {
+function getAllData() {
+ return Employee.find()
+}
 
-    // if array empty
-    if(!data.length) {
+const getAllUsers = async (req, res) => {
+    const users = await getAllData()
+
+    // if array is empty
+    if(!users.length) {
         return res.status(200).json({
             msg: `Data still empty`,
         })
     }
 
-    res.status(200).json(data)
+    res.status(200).json(users)
 }
 
-const createNewUser = (req, res) => {
-    const newData = req.body || {}
+const createNewUser = async (req, res) => {
+    const {username, password, role} = req.body
 
-    // handle request if received no data
-    if (!Object.keys(newData).length) {
+    // handle request if one of required field is missing
+    if (!username || !role || !password) {
         return res.status(400).json({
-            msg: 'No data was received',
-            error: true
-        })
-    }
-    
-    // handle request if one of required fields is missing
-    if (!newData.employee || !newData.role) {
-        return res.status(400).json({
-            msg: `received no ${newData.employee ? 'role' : 'employee'} data`,
+            msg: `all fields are required`,
             error: true
         })
     }
 
-    // prevent custom id from request
-    if (newData.id) {
-        delete newData.id
+    // handle if username already taken
+    const duplicateUsername = await Employee.findOne({username})
+    if (duplicateUsername) {
+        return res.status(409).json({
+            msg: `employee name with name ${username} already taken`,
+            error: true
+        })
     }
 
     // insert new data
-    const newId = data.length > 0 ? data.at(-1).id + 1 : 1
-    data.push({id: newId, ...newData})
+    const hashedPassword = await bcrypt.hash(password, 10)
+    try {
+        await Employee.create({username, password: hashedPassword, role})
 
-    res.status(200).json({
-        msg: 'new data successfully inserted'
-    })
+        res.status(201).json({
+            msg: 'new data successfully inserted'
+        })
+    } catch(err) {
+        res.status(500).json({
+            msg: `failed to create user`,
+            error: err.message
+        })
+    }
 }
 
-const updateUser = (req, res) => {
-    const newData = req.body || {}
+const updateUser = async (req, res) => {
+    const {username, role} = req.body
     const id = req.body.id
 
     // handle if received no id
@@ -61,75 +71,109 @@ const updateUser = (req, res) => {
         })
     }
 
-    // handle request if one of required fields is missing
-    if (!newData.employee || !newData.role) {
+    // handle request if required fields is missing
+    if (!username && !role) {
         return res.status(400).json({
-            msg: `received no ${newData.employee ? 'role' : 'employee'} data`,
+            msg: `received no data to be updated`,
             error: true
         })
     }
-    
-    // handle if received id don't match with any id in data array
-    const dataTarget = data.find(user => user.id === id)
-    if (!dataTarget) {
+
+    // handle if id doesn't match with any id in database
+    let targetId
+    try {
+        targetId = await Employee.findById(id)
+        if (!targetId) {
+            return res.status(404).json({
+                msg: `id with id : ${id} was not found!`,
+                error: true
+            })
+        }
+    } catch {
         return res.status(400).json({
-            msg: `there's no id with id: ${id} found`,
+            msg: `${id} is not a correct id format`,
             error: true
         })
     }
-    
+
     // handle if username already taken
-    const duplicateEmployeeName = data.find(user => user.employee === newData.employee && user.id !== id)
-    if (duplicateEmployeeName) {
-        return res.status(400).json({
-            msg: `employee name with name ${newData.employee} already taken`,
+    const newUsername = username || targetId.username
+    const duplicateUsername = await Employee.findOne(
+        {username : newUsername, _id: {$ne: id}}
+    )
+    if (duplicateUsername) {
+        return res.status(409).json({
+            msg: `employee name with name ${newUsername} already taken`,
             error: true
         })
     }
 
     // update data
-    const filteredData = data.filter(user => user.id !== id) 
-    console.log(filteredData, newData)
-    data = [...filteredData, newData]
+    try {
+        const updateFields = {}
+        if (username) updateFields.username = username
+        if (role) updateFields.role = role
 
-    res.status(200).json({
-        msg: 'data successfully updated'
-    })
+        await Employee.findByIdAndUpdate(id,
+            {$set: updateFields},
+            {runValidators: true}
+        )
+
+        res.status(200).json({
+            msg: 'data successfully updated'
+        })
+    } catch (err) {
+        res.status(500).json({
+            msg: `failed to update user`,
+            error: err.message
+        })
+    }
 }
 
-const deleteUser = (req, res) => {
+const deleteUser = async (req, res) => {
     const id = req.body.id
 
     // handle if received no id
     if(!id) {
         return res.status(400).json({
-            msg: `id are required!`,
+            msg: `id is required!`,
             error: true
         })
     }
 
-    // handle if received id don't match with any id in data array
-    const dataTarget = data.find(user => user.id === id)
-    if (!dataTarget) {
+    // handle if id doesn't match with any id in database
+    let user
+    try {
+        user = await Employee.findById(id)
+        if (!user) {
+            return res.status(404).json({
+                msg: `user with id : ${id} was not found!`,
+                error: true
+            })
+        }
+    } catch {
         return res.status(400).json({
-            msg: `there's no id with id: ${id} found`,
+            msg: `invalid id format`,
             error: true
         })
     }
 
     // delete existing data
-    const filteredData = data.filter(user => user.id !== id) 
-    data = filteredData
+    try {
+        await Employee.deleteOne({_id: user._id})
+        res.status(200).json({
+            msg: `data ${user.username} successfully deleted`
+        })
+    } catch (err) {
+        res.status(500).json({ msg: 'Server error', error: err.message })
+    }
 
-    res.status(200).json({
-        msg: `data with id: ${id} successfully deleted`
-    })
 }
 
 module.exports = {
     getAllUsers,
     createNewUser,
-    updateUser, 
+    updateUser,
     deleteUser
 }
 
