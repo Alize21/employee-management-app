@@ -1,10 +1,6 @@
 const Employee = require('../models/employee')
 const bcrypt = require('bcryptjs')
-// let data = [
-//     {id : 1, employee: 'Alize', role: 'admin'},
-//     {id : 2, employee: 'Alice', role: 'employee'},
-//     {id : 3, employee: 'Jambul', role: 'employee'},
-// ]
+const {isValidUsername, isValidPassword} = require('../middleware/validator')
 
 function getAllData() {
  return Employee.find()
@@ -30,6 +26,14 @@ const createNewUser = async (req, res) => {
     if (!username || !role || !password) {
         return res.status(400).json({
             msg: `all fields are required`,
+            error: true
+        })
+    }
+    
+    // check if username and password meet criteria
+    if (!isValidUsername(username) || !isValidPassword(password)) {
+        return res.status(400).json({
+            msg: `username and password must be 8 characters long`,
             error: true
         })
     }
@@ -92,6 +96,14 @@ const updateUser = async (req, res) => {
     } catch {
         return res.status(400).json({
             msg: `${id} is not a correct id format`,
+            error: true
+        })
+    }
+
+     // check if username and password meet the criteria
+    if (!isValidUsername(username)) {
+        return res.status(400).json({
+            msg: `username must be 8 characters long`,
             error: true
         })
     }
