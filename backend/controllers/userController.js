@@ -1,6 +1,6 @@
 const Employee = require('../models/employee')
 const bcrypt = require('bcryptjs')
-const {isValidUsername, isValidPassword} = require('../middleware/validator')
+const {isValidUsername, isValidPassword, checkId} = require('../middleware/validator')
 
 function getAllData() {
  return Employee.find()
@@ -84,20 +84,19 @@ const updateUser = async (req, res) => {
     }
 
     // handle if id doesn't match with any id in database
-    let targetId
     try {
-        targetId = await Employee.findById(id)
-        if (!targetId) {
+        const isValidId = await checkId(id)
+        if (!isValidId) {
             return res.status(404).json({
                 msg: `id with id : ${id} was not found!`,
                 error: true
             })
         }
     } catch {
-        return res.status(400).json({
-            msg: `${id} is not a correct id format`,
-            error: true
-        })
+            return res.status(400).json({
+                msg: `${id} is not a correct id format`,
+                error: true
+            })
     }
 
      // check if username and password meet the criteria
@@ -109,6 +108,7 @@ const updateUser = async (req, res) => {
     }
 
     // handle if username already taken
+    let targetId = await Employee.findById(id)
     const newUsername = username || targetId.username
     const duplicateUsername = await Employee.findOne(
         {username : newUsername, _id: {$ne: id}}
@@ -154,23 +154,23 @@ const deleteUser = async (req, res) => {
     }
 
     // handle if id doesn't match with any id in database
-    let user
     try {
-        user = await Employee.findById(id)
-        if (!user) {
+        const isValidId = await checkId(id)
+        if (!isValidId) {
             return res.status(404).json({
-                msg: `user with id : ${id} was not found!`,
+                msg: `id with id : ${id} was not found!`,
                 error: true
             })
         }
     } catch {
-        return res.status(400).json({
-            msg: `invalid id format`,
-            error: true
-        })
+            return res.status(400).json({
+                msg: `${id} is not a correct id format`,
+                error: true
+            })
     }
 
     // delete existing data
+    const user = await Employee.findById(id)
     try {
         await Employee.deleteOne({_id: user._id})
         res.status(200).json({
