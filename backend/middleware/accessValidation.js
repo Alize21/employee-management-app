@@ -25,6 +25,7 @@ const accessValidation = (req, res, next) => {
     try {
         const token = tokenPart[1]
         const payload = jwt.verify(token, process.env.JWT_PRIVATE_KEY)
+        req.user = payload
         next()
     } catch (err) {
         return res.status(403).json({
