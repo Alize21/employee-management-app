@@ -1,12 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const {getAllUsers, createNewUser, updateUser, deleteUser} = require('../controllers/userController')
+const {accessValidation} = require('../middleware/accessValidation')
 
-console.log(getAllUsers)
 router.route('/')
-    .get(getAllUsers)
-    .post(createNewUser)
-    .patch(updateUser)
-    .delete(deleteUser)
+    .get(accessValidation, getAllUsers)
+    .post(accessValidation, createNewUser)
+    .patch(accessValidation, updateUser)
+    .delete(accessValidation, deleteUser)
 
 module.exports = router

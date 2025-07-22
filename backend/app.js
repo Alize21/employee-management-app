@@ -14,5 +14,6 @@ app.use(cors({
 }))
 
 app.use('/', require('./routes/root'))
+app.use('/login', require('./routes/login'))
 
 app.listen(port, () => console.log(`server listening at port : ${port}`))
