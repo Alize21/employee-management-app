@@ -99,14 +99,6 @@ const updateUser = async (req, res) => {
             })
     }
 
-     // check if username and password meet the criteria
-    if (!isValidUsername(username)) {
-        return res.status(400).json({
-            msg: `username must be 8 characters long`,
-            error: true
-        })
-    }
-
     // handle if username already taken
     let targetId = await Employee.findById(id)
     const newUsername = username || targetId.username
@@ -116,6 +108,14 @@ const updateUser = async (req, res) => {
     if (duplicateUsername) {
         return res.status(409).json({
             msg: `employee name with name ${newUsername} already taken`,
+            error: true
+        })
+    }
+
+    // check if username and password meet the criteria
+    if (!isValidUsername(newUsername)) {
+        return res.status(400).json({
+            msg: `username must be 8 characters long`,
             error: true
         })
     }
