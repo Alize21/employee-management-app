@@ -1,5 +1,5 @@
 const token =
-  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4N2UzYzdlN2MzZGZkMWU0ZTMwOTQwYiIsInVzZXJuYW1lIjoiQWxpemVzMTIzIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0NDg4NjM1LCJleHAiOjE3NTQ0OTIyMzV9.hZkOkYYy_9k2VvkPcIoKbdKvfRL6eDq6wqmtYT4oYzE";
+  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4N2UzYzdlN2MzZGZkMWU0ZTMwOTQwYiIsInVzZXJuYW1lIjoiQWxpemVzMTIzIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU1NTIwNDAzLCJleHAiOjE3NTU1MjQwMDN9.lWDi6XtSHhvmIT2VQ8yohjTDeVmdMej50QwqO5qNMKk";
 
 const getUser = async () => {
   try {
