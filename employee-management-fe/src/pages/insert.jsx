@@ -1,7 +1,7 @@
 import { addUser } from "../api/user";
 import { useNavigate, Link } from "react-router-dom";
 import FormGetLayout from "../components/layouts/FormGetLayout";
-import Button from "../components/elements/button";
+import Button from "../components/elements/Button";
 import { useState } from "react";
 
 const InsertPage = () => {

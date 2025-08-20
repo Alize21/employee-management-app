@@ -8,7 +8,7 @@ const TableBody = ({ data, columns }) => {
           <TableRow key={i}>
             {columns.map((col, j) => (
               <td className="border p-3 text-md" key={j}>
-                {item[col]}
+                {col.render ? col.render(item) : item[col.key]}
               </td>
             ))}
           </TableRow>

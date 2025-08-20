@@ -1,12 +1,21 @@
 import TableGetLayout from "../components/layouts/TableGetLayout";
 import Table from "../components/fragments/Table";
-import { getUser } from "../api/user";
+import Button from "../components/elements/Button";
+import { getUser, deleteUser } from "../api/user";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {
   const [user, setUser] = useState(null);
-  const columns = ["username", "role"];
+
+  const handleClick = async (id) => {
+    try {
+      await deleteUser(id);
+      setUser((prevUsers) => prevUsers.filter((user) => user._id !== id));
+    } catch (err) {
+      setUser({ msg: err.message, error: err.status });
+    }
+  };
 
   useEffect(() => {
     getUser()
@@ -15,6 +24,25 @@ const HomePage = () => {
         setUser({ msg: err.message, error: err.status });
       });
   }, []);
+
+  const columns = [
+    { key: "username", label: "Username" },
+    { key: "role", label: "Role" },
+    {
+      key: "action",
+      label: "Action",
+      render: (item) => (
+        <div className="flex justify-center gap-1">
+          <Button color="green" type="button">
+            Update
+          </Button>
+          <Button type="button" handleClick={() => handleClick(item._id)}>
+            Delete
+          </Button>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <>
