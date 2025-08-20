@@ -32,11 +32,11 @@ const HomePage = () => {
       key: "action",
       label: "Action",
       render: (item) => (
-        <div className="flex justify-center gap-1">
+        <div className="flex justify-center gap-3">
           <Button color="green" type="button">
             Update
           </Button>
-          <Button type="button" handleClick={() => handleClick(item._id)}>
+          <Button type="button" variant={"red"} handleClick={() => handleClick(item._id)}>
             Delete
           </Button>
         </div>
