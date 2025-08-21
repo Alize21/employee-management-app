@@ -1,6 +1,6 @@
 import InputField from "../elements/input";
 import Select from "../elements/select";
-import Button from "../elements/button";
+import Button from "../elements/Button";
 
 const InsertForm = ({ handleSubmit, error }) => {
   return (

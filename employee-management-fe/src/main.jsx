@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/home";
 import InsertPage from "./pages/insert.jsx";
 import ErrorPage from "./pages/errorPage.jsx";
+import UpdatePage from "./pages/update.jsx";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
   {
     path: "/insert",
     element: <InsertPage />,
+  },
+  {
+    path: "/update/:id",
+    element: <UpdatePage />,
   },
 ]);
 

@@ -33,8 +33,8 @@ const HomePage = () => {
       label: "Action",
       render: (item) => (
         <div className="flex justify-center gap-3">
-          <Button color="green" type="button">
-            Update
+          <Button variant="green" type="button">
+            <Link to={`/update/${item._id}`}>Update</Link>
           </Button>
           <Button type="button" variant={"red"} handleClick={() => handleClick(item._id)}>
             Delete
