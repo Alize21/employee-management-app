@@ -7,6 +7,35 @@ import { useState } from "react";
 const InsertPage = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const formFields = [
+    {
+      component: "input",
+      type: "text",
+      label: "Username",
+      name: "username",
+      id: "username",
+      value: null,
+      required: true,
+    },
+    {
+      component: "input",
+      type: "password",
+      label: "Password",
+      name: "password",
+      id: "password",
+      value: null,
+      required: true,
+    },
+    {
+      component: "select",
+      options: ["employee", "admin"],
+      label: "Role",
+      name: "role",
+      id: "role",
+      value: null,
+      required: true,
+    },
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,7 +56,7 @@ const InsertPage = () => {
       <h1 className="text-lg my-5 font-bold">Insert Page</h1>
       <p className="text-md font-semibold">This is the insert page where you can add new entries.</p>
       <div className="p-10">
-        <FormGetLayout handleSubmit={handleSubmit} error={error}>
+        <FormGetLayout handleSubmit={handleSubmit} error={error} formFields={formFields}>
           Insert new user
         </FormGetLayout>
       </div>

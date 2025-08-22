@@ -7,6 +7,26 @@ const UpdatePage = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const { id } = useParams();
+  const formFields = [
+    {
+      component: "input",
+      type: "text",
+      label: "New username",
+      name: "username",
+      id: "username",
+      value: null,
+      required: true,
+    },
+    {
+      component: "select",
+      options: ["employee", "admin"],
+      label: "New role",
+      name: "role",
+      id: "role",
+      value: null,
+      required: true,
+    },
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,7 +43,7 @@ const UpdatePage = () => {
   return (
     <div>
       <h1>Update Page</h1>
-      <FormGetLayout handleSubmit={handleSubmit} error={error}>
+      <FormGetLayout handleSubmit={handleSubmit} error={error} formFields={formFields}>
         Update data
       </FormGetLayout>
     </div>

@@ -6,7 +6,7 @@ const colorVariants = {
 
 const Button = ({ type, children, handleClick, variant = "primary" }) => {
   return (
-    <button type={type} className={`py-1 px-1.5 rounded ${colorVariants[variant]}`} onClick={handleClick}>
+    <button type={type} className={`py-1 px-1.5 my-3 rounded ${colorVariants[variant]}`} onClick={handleClick}>
       {children}
     </button>
   );
