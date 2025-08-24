@@ -1,18 +1,16 @@
-import { addUser } from "../api/user";
-import { useNavigate, Link, Navigate } from "react-router-dom";
 import FormGetLayout from "../components/layouts/FormGetLayout";
 import Button from "../components/elements/Button";
+import { useNavigate, Link, Navigate } from "react-router-dom";
 import { useState } from "react";
+import { loginUser } from "../api/auth";
 import Cookies from "js-cookie";
-import { useEffect } from "react";
 
-const InsertPage = () => {
-  const navigate = useNavigate();
-
-  if (!Cookies.get("token")) {
-    return <Navigate to="/login" replace />;
+const LoginPage = () => {
+  if (Cookies.get("token")) {
+    return <Navigate to="/" replace />;
   }
 
+  const navigate = useNavigate();
   const [error, setError] = useState(null);
   const formFields = [
     {
@@ -21,7 +19,6 @@ const InsertPage = () => {
       label: "Username",
       name: "username",
       id: "username",
-      value: null,
       required: true,
     },
     {
@@ -30,41 +27,32 @@ const InsertPage = () => {
       label: "Password",
       name: "password",
       id: "password",
-      value: null,
-      required: true,
-    },
-    {
-      component: "select",
-      options: ["employee", "admin"],
-      label: "Role",
-      name: "role",
-      id: "role",
-      value: null,
       required: true,
     },
   ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { username, password, role } = e.target;
+    const { username, password } = e.target;
 
     try {
-      const res = await addUser(username.value, password.value, role.value);
+      const { token, role } = await loginUser(username.value, password.value);
+      //   setToken(res.token);
+      Cookies.set("token", token, { expires: 2 });
       navigate("/");
     } catch (err) {
       // TODO create flash message
-      const errorMessage = err.message || "An error occurred while adding the user.";
+      const errorMessage = err.message || "An error occurred while logging in.";
       setError(errorMessage);
     }
   };
 
   return (
     <div className="container mx-auto ">
-      <h1 className="text-lg my-5 font-bold">Insert Page</h1>
-      <p className="text-md font-semibold">This is the insert page where you can add new entries.</p>
+      <h1 className="text-lg my-5 font-bold">Login Page</h1>
       <div className="p-10">
         <FormGetLayout handleSubmit={handleSubmit} error={error} formFields={formFields}>
-          Insert new user
+          Login to your account
         </FormGetLayout>
       </div>
       <Link to="/">
@@ -74,4 +62,4 @@ const InsertPage = () => {
   );
 };
 
-export default InsertPage;
+export default LoginPage;

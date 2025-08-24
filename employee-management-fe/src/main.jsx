@@ -5,6 +5,7 @@ import HomePage from "./pages/home";
 import InsertPage from "./pages/insert.jsx";
 import ErrorPage from "./pages/errorPage.jsx";
 import UpdatePage from "./pages/update.jsx";
+import LoginPage from "./pages/login.jsx";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "/update/:id",
     element: <UpdatePage />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
   },
 ]);
 

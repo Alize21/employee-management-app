@@ -1,10 +1,16 @@
 import FormGetLayout from "../components/layouts/FormGetLayout";
 import { updateUser, getUser } from "../api/user";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 
 const UpdatePage = () => {
   const navigate = useNavigate();
+
+  if (!Cookies.get("token")) {
+    return <Navigate to="/login" replace />;
+  }
+
   const [error, setError] = useState(null);
   const [formError, setFormError] = useState(null);
   const [user, setUser] = useState(null);

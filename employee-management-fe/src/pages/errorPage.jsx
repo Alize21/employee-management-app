@@ -1,6 +1,12 @@
 import { useRouteError } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const ErrorPage = () => {
+  if (!Cookies.get("token")) {
+    return <Navigate to="/login" replace />;
+  }
+
   const error = useRouteError();
 
   return (

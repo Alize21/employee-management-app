@@ -3,9 +3,14 @@ import Table from "../components/fragments/Table";
 import Button from "../components/elements/Button";
 import { getUser, deleteUser } from "../api/user";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const HomePage = () => {
+  if (!Cookies.get("token")) {
+    return <Navigate to="/login" replace />;
+  }
+
   const [user, setUser] = useState(null);
 
   const handleClick = async (id) => {
