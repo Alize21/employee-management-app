@@ -38,7 +38,7 @@ const login = async (req, res) => {
     username: user.username,
     role: user.role,
   };
-  const token = jwt.sign(payload, process.env.JWT_PRIVATE_KEY, { expiresIn: "1h" });
+  const token = jwt.sign(payload, process.env.JWT_PRIVATE_KEY, { expiresIn: "48h" });
   return res.status(200).json({
     msg: `login success, use token below to access the other endpoint`,
     id: user._id,
