@@ -1,4 +1,5 @@
 import FormGetLayout from "../components/layouts/FormGetLayout";
+import Header from "../components/fragments/Header";
 import { updateUser, getUser } from "../api/user";
 import { useNavigate, useParams, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -77,6 +78,7 @@ const UpdatePage = () => {
         <p>Loading...</p>
       ) : (
         <>
+          <Header />
           <h1>Update Page</h1>
           <FormGetLayout handleSubmit={handleSubmit} error={formError} formFields={formFields}>
             Update data

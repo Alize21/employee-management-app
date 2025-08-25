@@ -1,6 +1,7 @@
 import TableGetLayout from "../components/layouts/TableGetLayout";
 import Table from "../components/fragments/Table";
 import Button from "../components/elements/Button";
+import Header from "../components/fragments/Header";
 import { getUser, deleteUser } from "../api/user";
 import { useState, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
@@ -58,9 +59,12 @@ const HomePage = () => {
           Message: {user.msg} <br /> Error status: {user.error.toString()}
         </p>
       ) : (
-        <TableGetLayout title="Welcome to Employee Management App">
-          <Table columns={columns} user={user} color={"bg-slate-400"} />
-        </TableGetLayout>
+        <>
+          <Header />
+          <TableGetLayout title="Welcome to Employee Management App">
+            <Table columns={columns} user={user} color={"bg-slate-400"} />
+          </TableGetLayout>
+        </>
       )}
 
       <div className="flex justify-center mt-4">

@@ -2,9 +2,9 @@ import { addUser } from "../api/user";
 import { useNavigate, Link, Navigate } from "react-router-dom";
 import FormGetLayout from "../components/layouts/FormGetLayout";
 import Button from "../components/elements/Button";
+import Header from "../components/fragments/Header";
 import { useState } from "react";
 import Cookies from "js-cookie";
-import { useEffect } from "react";
 
 const InsertPage = () => {
   const navigate = useNavigate();
@@ -59,18 +59,21 @@ const InsertPage = () => {
   };
 
   return (
-    <div className="container mx-auto ">
-      <h1 className="text-lg my-5 font-bold">Insert Page</h1>
-      <p className="text-md font-semibold">This is the insert page where you can add new entries.</p>
-      <div className="p-10">
-        <FormGetLayout handleSubmit={handleSubmit} error={error} formFields={formFields}>
-          Insert new user
-        </FormGetLayout>
+    <>
+      <Header />
+      <div className="container mx-auto ">
+        <h1 className="text-lg my-5 font-bold">Insert Page</h1>
+        <p className="text-md font-semibold">This is the insert page where you can add new entries.</p>
+        <div className="p-10">
+          <FormGetLayout handleSubmit={handleSubmit} error={error} formFields={formFields}>
+            Insert new user
+          </FormGetLayout>
+        </div>
+        <Link to="/">
+          <Button type="button">Go Home</Button>
+        </Link>
       </div>
-      <Link to="/">
-        <Button type="button">Go Home</Button>
-      </Link>
-    </div>
+    </>
   );
 };
 
